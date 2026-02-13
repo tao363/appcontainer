@@ -5,3 +5,21 @@
 AppContainer/x64/Release/*.log
 AppContainer/x64/Debug/opencode/data/opencode/log/*
 
+# Visual Studio / VS Code 临时文件
+.vs/
+*.suo
+*.user
+*.sln.docstates
+
+# 构建输出
+x64/
+Debug/
+Release/
+bin/
+obj/
+*.exe
+*.pdb
+*.lib
+*.dll
+*.ilk
+*.exp
