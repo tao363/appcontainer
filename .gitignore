@@ -1,2 +1,7 @@
-../.claude
-.vs
+.claude/*
+.AppContainer.vs
+.vscode
+*.log
+AppContainer/x64/Release/*.log
+AppContainer/x64/Debug/opencode/data/opencode/log/*
+

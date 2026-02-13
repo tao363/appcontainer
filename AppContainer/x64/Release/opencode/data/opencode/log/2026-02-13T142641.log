@@ -1,4 +1,0 @@
-INFO  2026-02-13T14:26:41 +190ms service=default version=1.1.60 args=[] opencode
-INFO  2026-02-13T14:26:41 +2ms service=config path=F:\Project\git\appcontainer\AppContainer\x64\Release\opencode\config\opencode\config.json loading
-INFO  2026-02-13T14:26:41 +1ms service=config path=F:\Project\git\appcontainer\AppContainer\x64\Release\opencode\config\opencode\opencode.json loading
-INFO  2026-02-13T14:26:41 +0ms service=config path=F:\Project\git\appcontainer\AppContainer\x64\Release\opencode\config\opencode\opencode.jsonc loading
