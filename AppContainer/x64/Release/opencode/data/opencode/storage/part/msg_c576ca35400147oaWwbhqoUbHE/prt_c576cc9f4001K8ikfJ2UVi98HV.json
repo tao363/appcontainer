@@ -1,0 +1,19 @@
+{
+  "id": "prt_c576cc9f4001K8ikfJ2UVi98HV",
+  "sessionID": "ses_3a8948d4bffeavbh9FlOITsrMO",
+  "messageID": "msg_c576ca35400147oaWwbhqoUbHE",
+  "type": "tool",
+  "callID": "call_function_44tktr35tdru_1",
+  "tool": "read",
+  "state": {
+    "status": "error",
+    "input": {
+      "filePath": "C:\\Users\\tao\\1.txt"
+    },
+    "error": "Error: EPERM: operation not permitted, scandir 'C:\\Users\\tao'",
+    "time": {
+      "start": 1770993273338,
+      "end": 1770993273362
+    }
+  }
+}

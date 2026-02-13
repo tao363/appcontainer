@@ -1,0 +1,17 @@
+{
+  "id": "msg_c578092e4001iqxXGQ4Gyme67F",
+  "sessionID": "ses_3a87f6d1dffexxDcsO9Yh6oTYM",
+  "role": "user",
+  "time": {
+    "created": 1770994569967
+  },
+  "summary": {
+    "title": "Greeting in Chinese: nihao",
+    "diffs": []
+  },
+  "agent": "build",
+  "model": {
+    "providerID": "opencode",
+    "modelID": "big-pickle"
+  }
+}

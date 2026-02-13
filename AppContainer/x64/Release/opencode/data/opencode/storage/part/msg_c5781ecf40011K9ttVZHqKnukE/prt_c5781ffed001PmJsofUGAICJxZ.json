@@ -1,0 +1,11 @@
+{
+  "id": "prt_c5781ffed001PmJsofUGAICJxZ",
+  "sessionID": "ses_3a87e784effeTi2f3gLjF81oo0",
+  "messageID": "msg_c5781ecf40011K9ttVZHqKnukE",
+  "type": "text",
+  "text": "无法访问该文件 - 当前工作环境没有权限访问 `C:\\Users\\tao\\` 目录。这是因为：\n\n1. 当前进程运行在受限的 AppContainer 沙箱中\n2. 工作目录是 `F:\\Project\\git\\appcontainer\\AppContainer\\x64\\Release\\opencode\\work`\n\n如果你需要读取该文件，可能需要：\n- 将文件复制到当前工作目录\n- 或者使用具有管理员权限的方式运行",
+  "time": {
+    "start": 1770994664649,
+    "end": 1770994664649
+  }
+}

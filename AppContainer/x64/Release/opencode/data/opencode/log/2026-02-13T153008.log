@@ -1,0 +1,36 @@
+INFO  2026-02-13T15:30:08 +76ms service=server method=GET path=/event request
+INFO  2026-02-13T15:30:08 +0ms service=server status=started method=GET path=/event request
+INFO  2026-02-13T15:30:08 +1ms service=default directory=F:\Project\git\appcontainer\AppContainer\x64\Release\opencode\work creating instance
+INFO  2026-02-13T15:30:08 +0ms service=project directory=F:\Project\git\appcontainer\AppContainer\x64\Release\opencode\work fromDirectory
+INFO  2026-02-13T15:30:08 +12ms service=default directory=F:\Project\git\appcontainERROR 2026-02-13T15:30:09 +1004ms service=default e=setRawMode failed with errno: 1 exception
+ERROR 2026-02-13T15:30:09 +0ms service=default Error: setRawMode failed with errno: 1
+code\config.json loading
+INFO  2026-02-13T15:30:08 +0ms service=config path=F:\Project\git\appcontainer\AppContainer\x64\Release\opencode\config\opencode\opencode.json loading
+INFO  2026-02-13T15:30:08 +1ms service=config path=F:\Project\git\appcontainer\AppContainer\x64\Release\opencode\config\opencode\opencode.jsonc loading
+INFO  2026-02-13T15:30:08 +0ms service=config path=F:\Project\git\appcontainer\AppContainer\x64\Release\opencode\opencode.json loading
+INFO  2026-02-13T15:30:08 +5ms service=plugin name=CodexAuthPlugin loading internal plugin
+INFO  2026-02-13T15:30:08 +0ms service=plugin name=CopilotAuthPlugin loading internal plugin
+INFO  2026-02-13T15:30:08 +1ms service=plugin name=gitlabAuthPlugin loading internal plugin
+INFO  2026-02-13T15:30:08 +0ms service=plugin path=opencode-anthropic-auth@0.0.13 loading plugin
+INFO  2026-02-13T15:30:08 +0ms service=bun pkg=opencode-anthropic-auth version=0.0.13 installing package using Bun's default registry resolution
+INFO  2026-02-13T15:30:08 +0ms service=bun cmd=["F:\\Project\\git\\appcontainer\\opencode.exe","add","--force","--exact","--cwd","F:\\Project\\git\\appcontainer\\AppContainer\\x64\\Release\\opencode\\cache\\opencode","opencode-anthropic-auth@0.0.13"] cwd=F:\Project\git\appcontainer\AppContainer\x64\Release\opencode\cache\opencode running
+ERROR 2026-02-13T15:30:08 +1ms service=plugin pkg=opencode-anthropic-auth version=0.0.13 error=BunInstallFailedError failed to install builtin plugin
+INFO  2026-02-13T15:30:08 +0ms service=bus type=session.error publishing
+INFO  2026-02-13T15:30:08 +0ms service=bus type=* subscribing
+INFO  2026-02-13T15:30:08 +0ms service=bus type=session.updated subscribing
+INFO  2026-02-13T15:30:08 +0ms service=bus type=message.updated subscribing
+INFO  2026-02-13T15:30:08 +0ms service=bus type=message.part.updated subscribing
+INFO  2026-02-13T15:30:08 +0ms service=bus type=session.updated subscribing
+INFO  2026-02-13T15:30:08 +0ms service=bus type=message.updated subscribing
+INFO  2026-02-13T15:30:08 +0ms service=bus type=message.part.updated subscribing
+INFO  2026-02-13T15:30:08 +0ms service=bus type=session.diff subscribing
+INFO  2026-02-13T15:30:08 +0ms service=format init
+INFO  2026-02-13T15:30:08 +0ms service=bus type=file.edited subscribing
+INFO  2026-02-13T15:30:08 +0ms service=lsp serverIds=deno, typescript, vue, eslint, oxlint, biome, gopls, ruby-lsp, pyright, elixir-ls, zls, csharp, fsharp, sourcekit-lsp, rust, clangd, svelte, astro, jdtls, kotlin-ls, yaml-ls, lua-ls, php intelephense, prisma, dart, ocaml-lsp, bash, terraform, texlab, dockerfile, gleam, clojure-lsp, nixd, tinymist, haskell-language-server enabled LSP servers
+INFO  2026-02-13T15:30:08 +1ms service=scheduler id=snapshot.cleanup run
+INFO  2026-02-13T15:30:08 +0ms service=scheduler id=tool.truncation.cleanup run
+INFO  2026-02-13T15:30:08 +1ms service=bus type=command.executed subscribing
+INFO  2026-02-13T15:30:08 +0ms service=server event connected
+INFO  2026-02-13T15:30:08 +2ms service=bus type=* subscribing
+INFO  2026-02-13T15:30:08 +0ms service=server status=completed duration=27 method=GET path=/event request
+INFO  2026-02-13T15:30:11 +3003ms service=bun cmd=["F:\\Project\\git\\appcontainer\\opencode.exe","install"] cwd=F:\Project\git\appcontainer\AppContainer\x64\Release\opencode\config\opencode running

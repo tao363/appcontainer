@@ -1,0 +1,20 @@
+{
+  "id": "prt_c5781ecc9001hd8v91xjm31Z4Q",
+  "sessionID": "ses_3a87e784effeTi2f3gLjF81oo0",
+  "messageID": "msg_c5781d959001yhbdzk8cl0LctB",
+  "type": "tool",
+  "callID": "call_function_v9ybr2w2o54m_1",
+  "tool": "bash",
+  "state": {
+    "status": "error",
+    "input": {
+      "command": "type \"C:\\Users\\tao\\1.txt\"",
+      "description": "Read file content on Windows"
+    },
+    "error": "Error: EPERM: operation not permitted, uv_spawn 'cmd.exe'",
+    "time": {
+      "start": 1770994658515,
+      "end": 1770994658529
+    }
+  }
+}

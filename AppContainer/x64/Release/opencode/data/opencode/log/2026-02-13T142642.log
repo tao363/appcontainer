@@ -1,0 +1,83 @@
+INFO  2026-02-13T14:26:42 +76ms service=server method=GET path=/event request
+INFO  2026-02-13T14:26:42 +0ms service=server status=started method=GET path=/event request
+INFO  2026-02-13T14:26:42 +1ms service=default directory=F:\Project\git\appcontainer\AppContainer\x64\Release\opencode\work creating instance
+INFO  2026-02-13T14:26:42 +0ms service=project directory=F:\Project\git\appcontainer\AppContainer\x64\Release\opencode\work fromDirectory
+INFO  2026-02-13T14:26:42 +30ms service=default directory=F:\Project\git\appcontainer\AppContainer\x64\Release\opencode\work bootstrapping
+INFO  2026-02-13T14:26:42 +2ms service=config path=F:\Project\git\appcontainer\AppContainer\x64\Release\opencode\config\opencode\config.json loading
+INFO  2026-02-13T14:26:42 +0ms service=config path=F:\Project\git\appcontainer\AppContainer\x64\Release\opencode\config\opencode\opencode.json loading
+INFO  2026-02-13T14:26:42 +0ms service=config path=F:\Project\git\appcontainer\AppContainer\x64\Release\opencode\config\opencode\opencode.jsonc loading
+INFO  2026-02-13T14:26:42 +0ms service=config path=F:\Project\git\appcontainer\AppContainer\x64\Release\opencode\opencode.json loading
+INFO  2026-02-13T14:26:42 +6ms service=plugin name=CodexAuthPlugin loading internal plugin
+INFO  2026-02-13T14:26:42 +0ms service=plugin name=CopilotAuthPlugin loading internal plugin
+INFO  2026-02-13T14:26:42 +0ms service=plugin name=gitlabAuthPlugin loading internal plugin
+INFO  2026-02-13T14:26:42 +0ms service=plugin path=opencode-anthropic-auth@0.0.13 loading plugin
+INFO  2026-02-13T14:26:42 +1ms service=bun pkg=opencode-anthropic-auth version=0.0.13 installing package using Bun's default registry resolution
+INFO  2026-02-13T14:26:42 +0ms service=bun cmd=["F:\\Project\\git\\appcontainer\\opencode.exe","add","--force","--exact","--cwd","F:\\Project\\git\\appcontainer\\AppContainer\\x64\\Release\\opencode\\cache\\opencode","opencode-anthropic-auth@0.0.13"] cwd=F:\Project\git\appcontainer\AppContainer\x64\Release\opencode\cache\opencode running
+ERROR 2026-02-13T14:26:42 +0ms service=plugin pkg=opencode-anthropic-auth version=0.0.13 error=BunInstallFailedError failed to install builtin plugin
+INFO  2026-02-13T14:26:42 +0ms service=bus type=session.error publishing
+INFO  2026-02-13T14:26:42 +0ms service=bus type=* subscribing
+INFO  2026-02-13T14:26:42 +1ms service=bus type=session.updated subscribing
+INFO  2026-02-13T14:26:42 +0ms service=bus type=message.updated subscribing
+INFO  2026-02-13T14:26:42 +0ms service=bus type=message.part.updated subscribing
+INFO  2026-02-13T14:26:42 +0ms service=bus type=session.updated subscribing
+INFO  2026-02-13T14:26:42 +0ms service=bus type=message.updated subscribing
+INFO  2026-02-13T14:26:42 +0ms service=bus type=message.part.updated subscribing
+INFO  2026-02-13T14:26:42 +0ms service=bus type=session.diff subscribing
+INFO  2026-02-13T14:26:42 +0ms service=format init
+INFO  2026-02-13T14:26:42 +0ms service=bus type=file.edited subscribing
+INFO  2026-02-13T14:26:42 +0ms service=lsp serverIds=deno, typescript, vue, eslint, oxlint, biome, gopls, ruby-lsp, pyright, elixir-ls, zls, csharp, fsharp, sourcekit-lsp, rust, clangd, svelte, astro, jdtls, kotlin-ls, yaml-ls, lua-ls, php intelephense, prisma, dart, ocaml-lsp, bash, terraform, texlab, dockerfile, gleam, clojure-lsp, nixd, tinymist, haskell-language-server enabled LSP servers
+INFO  2026-02-13T14:26:42 +1ms service=scheduler id=snapshot.cleanup run
+INFO  2026-02-13T14:26:42 +0ms service=scheduler id=tool.truncation.cleanup run
+INFO  2026-02-13T14:26:42 +0ms service=bus type=command.executed subscribing
+INFO  2026-02-13T14:26:42 +1ms service=server event connected
+INFO  2026-02-13T14:26:42 +1ms service=bus type=* subscribing
+INFO  2026-02-13T14:26:42 +1ms service=server status=completed duration=45 method=GET path=/event request
+INFO  2026-02-13T14:26:43 +712ms service=server method=GET path=/session request
+INFO  2026-02-13T14:26:43 +0ms service=server status=started method=GET path=/session request
+INFO  2026-02-13T14:26:43 +1ms service=server method=GET path=/config/providers request
+INFO  2026-02-13T14:26:43 +0ms service=server status=started method=GET path=/config/providers request
+INFO  2026-02-13T14:26:43 +0ms service=server status=started providers
+INFO  2026-02-13T14:26:43 +2ms service=provider status=started state
+INFO  2026-02-13T14:26:43 +0ms service=server method=GET path=/provider request
+INFO  2026-02-13T14:26:43 +0ms service=server status=started method=GET path=/provider request
+INFO  2026-02-13T14:26:43 +0ms service=server method=GET path=/agent request
+INFO  2026-02-13T14:26:43 +0ms service=server status=started method=GET path=/agent request
+INFO  2026-02-13T14:26:43 +1ms service=server method=GET path=/config request
+INFO  2026-02-13T14:26:43 +0ms service=server status=started method=GET path=/config request
+INFO  2026-02-13T14:26:43 +0ms service=server status=completed duration=0 method=GET path=/config request
+INFO  2026-02-13T14:26:43 +10ms service=provider init
+INFO  2026-02-13T14:26:43 +1ms service=server status=completed duration=15 method=GET path=/session request
+INFO  2026-02-13T14:26:43 +1ms service=server status=completed duration=13 method=GET path=/agent request
+INFO  2026-02-13T14:26:43 +1ms service=provider providerID=opencode found
+INFO  2026-02-13T14:26:43 +0ms service=provider status=completed duration=14 state
+INFO  2026-02-13T14:26:43 +11ms service=server status=completed duration=27 providers
+INFO  2026-02-13T14:26:43 +1ms service=server status=completed duration=26 method=GET path=/provider request
+INFO  2026-02-13T14:26:43 +0ms service=server status=completed duration=28 method=GET path=/config/providers request
+INFO  2026-02-13T14:26:43 +35ms service=server method=GET path=/command request
+INFO  2026-02-13T14:26:43 +1ms service=server status=started method=GET path=/command request
+INFO  2026-02-13T14:26:43 +0ms service=server status=completed duration=0 method=GET path=/command request
+INFO  2026-02-13T14:26:43 +1ms service=server method=GET path=/lsp request
+INFO  2026-02-13T14:26:43 +0ms service=server status=started method=GET path=/lsp request
+INFO  2026-02-13T14:26:43 +0ms service=server status=completed duration=0 method=GET path=/lsp request
+INFO  2026-02-13T14:26:43 +0ms service=server method=GET path=/mcp request
+INFO  2026-02-13T14:26:43 +0ms service=server status=started method=GET path=/mcp request
+INFO  2026-02-13T14:26:43 +0ms service=server status=completed duration=0 method=GET path=/mcp request
+INFO  2026-02-13T14:26:43 +0ms service=server method=GET path=/experimental/resource request
+INFO  2026-02-13T14:26:43 +0ms service=server status=started method=GET path=/experimental/resource request
+INFO  2026-02-13T14:26:43 +0ms service=server status=completed duration=0 method=GET path=/experimental/resource request
+INFO  2026-02-13T14:26:43 +0ms service=server method=GET path=/formatter request
+INFO  2026-02-13T14:26:43 +0ms service=server status=started method=GET path=/formatter request
+INFO  2026-02-13T14:26:43 +19ms service=server method=GET path=/session/status request
+INFO  2026-02-13T14:26:43 +0ms service=server status=started method=GET path=/session/status request
+INFO  2026-02-13T14:26:43 +0ms service=server status=completed duration=0 method=GET path=/session/status request
+INFO  2026-02-13T14:26:43 +0ms service=server method=GET path=/provider/auth request
+INFO  2026-02-13T14:26:43 +0ms service=server status=started method=GET path=/provider/auth request
+INFO  2026-02-13T14:26:43 +1ms service=server status=completed duration=1 method=GET path=/provider/auth request
+INFO  2026-02-13T14:26:43 +0ms service=server method=GET path=/vcs request
+INFO  2026-02-13T14:26:43 +0ms service=server status=started method=GET path=/vcs request
+INFO  2026-02-13T14:26:43 +0ms service=server status=completed duration=0 method=GET path=/vcs request
+INFO  2026-02-13T14:26:43 +0ms service=server method=GET path=/path request
+INFO  2026-02-13T14:26:43 +0ms service=server status=started method=GET path=/path request
+INFO  2026-02-13T14:26:43 +0ms service=server status=completed duration=0 method=GET path=/path request
+INFO  2026-02-13T14:26:43 +21ms service=server status=completed duration=41 method=GET path=/formatter request
+INFO  2026-02-13T14:26:45 +2183ms service=bun cmd=["F:\\Project\\git\\appcontainer\\opencode.exe","install"] cwd=F:\Project\git\appcontainer\AppContainer\x64\Release\opencode\config\opencode running

@@ -1,0 +1,277 @@
+﻿[2026-02-13 23:30:07.580][INFO] ========================================
+[2026-02-13 23:30:07.580][INFO] LaunchAppContainer starting
+[2026-02-13 23:30:07.580][INFO]   exe: F:\Project\git\appcontainer\opencode.exe
+[2026-02-13 23:30:07.580][INFO]   moniker: OpenCodeContainer
+[2026-02-13 23:30:07.580][INFO]   wait=1, conpty=0, lpac=0, noWin32k=0
+[2026-02-13 23:30:07.580][INFO] ========================================
+[2026-02-13 23:30:07.580][INFO] [EnvDefault] Setting up default OpenCode env paths under: F:\Project\git\appcontainer\AppContainer\x64\Release
+[2026-02-13 23:30:07.580][INFO] [EnvDefault] Setting default: HOME = F:\Project\git\appcontainer\AppContainer\x64\Release\opencode\work
+[2026-02-13 23:30:07.581][INFO] [EnvDefault] Setting default: USERPROFILE = F:\Project\git\appcontainer\AppContainer\x64\Release\opencode\work
+[2026-02-13 23:30:07.581][INFO] [EnvDefault] Setting default: APPDATA = F:\Project\git\appcontainer\AppContainer\x64\Release\opencode\config
+[2026-02-13 23:30:07.581][INFO] [EnvDefault] Setting default: LOCALAPPDATA = F:\Project\git\appcontainer\AppContainer\x64\Release
+[2026-02-13 23:30:07.581][INFO] [EnvDefault] Setting default: TEMP = F:\Project\git\appcontainer\AppContainer\x64\Release\opencode\temp
+[2026-02-13 23:30:07.581][INFO] [EnvDefault] Setting default: TMP = F:\Project\git\appcontainer\AppContainer\x64\Release\opencode\temp
+[2026-02-13 23:30:07.581][INFO] [EnvDefault] Setting default: XDG_CONFIG_HOME = F:\Project\git\appcontainer\AppContainer\x64\Release\opencode\config
+[2026-02-13 23:30:07.581][INFO] [EnvDefault] Setting default: XDG_CACHE_HOME = F:\Project\git\appcontainer\AppContainer\x64\Release\opencode\cache
+[2026-02-13 23:30:07.581][INFO] [EnvDefault] Setting default: XDG_DATA_HOME = F:\Project\git\appcontainer\AppContainer\x64\Release\opencode\data
+[2026-02-13 23:30:07.581][INFO] [EnvDefault] Setting default: OPENCODE_CONFIG = F:\Project\git\appcontainer\AppContainer\x64\Release\opencode\opencode.json
+[2026-02-13 23:30:07.581][INFO] [EnvDefault] Auto-allowed path: F:\Project\git\appcontainer\AppContainer\x64\Release\opencode
+[2026-02-13 23:30:07.581][INFO] [EnvDefault] Auto-allowed path: F:\Project\git\appcontainer\AppContainer\x64\Release\opencode\work
+[2026-02-13 23:30:07.581][INFO] [EnvDefault] Auto-allowed path: F:\Project\git\appcontainer\AppContainer\x64\Release\opencode\config
+[2026-02-13 23:30:07.581][INFO] [EnvDefault] Auto-allowed path: F:\Project\git\appcontainer\AppContainer\x64\Release\opencode\cache
+[2026-02-13 23:30:07.581][INFO] [EnvDefault] Auto-allowed path: F:\Project\git\appcontainer\AppContainer\x64\Release\opencode\data
+[2026-02-13 23:30:07.582][INFO] [EnvDefault] Auto-allowed path: F:\Project\git\appcontainer\AppContainer\x64\Release\opencode\temp
+[2026-02-13 23:30:07.584][INFO] [EnvDefault] Auto read-only path: C:\Windows\system32
+[2026-02-13 23:30:07.584][INFO] [EnvDefault] Auto read-only path: C:\Windows
+[2026-02-13 23:30:07.584][INFO] [EnvDefault] Auto-allowed path (tools): F:\Project\git\appcontainer\AppContainer\x64\Release\opencode\data\opencode\bin
+[2026-02-13 23:30:07.584][INFO] [EnvDefault] Default OpenCode env paths applied.
+[2026-02-13 23:30:07.585][DEBUG] [BunCompat] Not a Bun invocation, skipping compatibility setup.
+[2026-02-13 23:30:07.585][DEBUG] [SubstResolve] Checking if exe path is on SUBST drive: F:\Project\git\appcontainer\opencode.exe
+[2026-02-13 23:30:07.585][DEBUG] [SubstResolve] Not a SUBST drive or resolution not needed.
+[2026-02-13 23:30:07.585][INFO] [Auto] Added exe parent dir to allowed paths: F:\Project\git\appcontainer
+[2026-02-13 23:30:07.585][INFO] [BunVFS] Setting up virtual drive for: F:\Project\git\appcontainer\opencode.exe
+[2026-02-13 23:30:07.585][DEBUG] [BunVFS] Scanning 160022528 bytes for DLL name pattern 'opentui-*.dll'...
+[2026-02-13 23:30:07.642][INFO] [BunVFS] Found DLL name at offset 0x7514374: 'opentui-txxqvfz2.dll' (scanned 1 candidates)
+[2026-02-13 23:30:07.643][INFO] [BunVFS] Scanning 160022528 bytes for embedded PE DLLs...
+[2026-02-13 23:30:07.643][DEBUG] [BunVFS/PE] COFF header: machine=0x8664, sections=12, optHdrSize=240, chars=0x0022
+[2026-02-13 23:30:07.658][DEBUG] [BunVFS/PE] COFF header: machine=0x8664, sections=5, optHdrSize=240, chars=0x0022
+[2026-02-13 23:30:07.660][DEBUG] [BunVFS/PE] COFF header: machine=0x8664, sections=3, optHdrSize=240, chars=0x022F
+[2026-02-13 23:30:07.689][DEBUG] [BunVFS/PE] COFF header: machine=0x8664, sections=7, optHdrSize=240, chars=0x2022
+[2026-02-13 23:30:07.689][DEBUG] [BunVFS/PE] Format: PE32+ (64-bit)
+[2026-02-13 23:30:07.689][DEBUG] [BunVFS/PE] SizeOfHeaders=0x400, FileAlignment=0x200, SizeOfImage=0x85000
+[2026-02-13 23:30:07.689][DEBUG] [BunVFS/PE] NumberOfRvaAndSizes=16
+[2026-02-13 23:30:07.689][DEBUG] [BunVFS/PE]   Section[0] '.text': RawSize=0x5E600, RawPtr=0x400
+[2026-02-13 23:30:07.689][DEBUG] [BunVFS/PE]   Section[1] '.rdata': RawSize=0x18600, RawPtr=0x5EA00
+[2026-02-13 23:30:07.689][DEBUG] [BunVFS/PE]   Section[2] '.data': RawSize=0x1600, RawPtr=0x77000
+[2026-02-13 23:30:07.689][DEBUG] [BunVFS/PE]   Section[3] '.pdata': RawSize=0x5000, RawPtr=0x78600
+[2026-02-13 23:30:07.689][DEBUG] [BunVFS/PE]   Section[4] '.fptable': RawSize=0x200, RawPtr=0x7D600
+[2026-02-13 23:30:07.689][DEBUG] [BunVFS/PE]   Section[5] '.rsrc': RawSize=0x200, RawPtr=0x7D800
+[2026-02-13 23:30:07.690][DEBUG] [BunVFS/PE]   Section[6] '.reloc': RawSize=0xE00, RawPtr=0x7DA00
+[2026-02-13 23:30:07.690][DEBUG] [BunVFS/PE] Size after sections: 0x7E800
+[2026-02-13 23:30:07.690][DEBUG] [BunVFS/PE] Debug directory: RVA=0x6DAD4, fileOff=0x6C4D4, entries=4
+[2026-02-13 23:30:07.690][DEBUG] [BunVFS/PE] Size after cert+debug: 0x7E800
+[2026-02-13 23:30:07.691][INFO] [BunVFS/PE] Validated DLL: PE32+(x64), 7 sections, computed size=518144 bytes (0x7E800)
+[2026-02-13 23:30:07.692][DEBUG] [BunVFS/Export] No export directory (RVA=0x0, size=0x0)
+[2026-02-13 23:30:07.692][INFO] [BunVFS] PE candidate at offset 0x935FE7E: size=518144, exports=0, hasSetLogCallback=NO
+[2026-02-13 23:30:07.692][DEBUG] [BunVFS/PE] COFF header: machine=0x8664, sections=10, optHdrSize=240, chars=0x222E
+[2026-02-13 23:30:07.692][DEBUG] [BunVFS/PE] Format: PE32+ (64-bit)
+[2026-02-13 23:30:07.692][DEBUG] [BunVFS/PE] SizeOfHeaders=0x400, FileAlignment=0x200, SizeOfImage=0x80000
+[2026-02-13 23:30:07.693][DEBUG] [BunVFS/PE] NumberOfRvaAndSizes=16
+[2026-02-13 23:30:07.693][DEBUG] [BunVFS/PE]   Section[0] '.text': RawSize=0x5F800, RawPtr=0x400
+[2026-02-13 23:30:07.693][DEBUG] [BunVFS/PE]   Section[1] '.data': RawSize=0xC00, RawPtr=0x5FC00
+[2026-02-13 23:30:07.693][DEBUG] [BunVFS/PE]   Section[2] '.rdata': RawSize=0xDC00, RawPtr=0x60800
+[2026-02-13 23:30:07.693][DEBUG] [BunVFS/PE]   Section[3] '.pdata': RawSize=0x2000, RawPtr=0x6E400
+[2026-02-13 23:30:07.693][DEBUG] [BunVFS/PE]   Section[4] '.xdata': RawSize=0x5E00, RawPtr=0x70400
+[2026-02-13 23:30:07.693][DEBUG] [BunVFS/PE]   Section[5] '.bss': RawSize=0x0, RawPtr=0x0
+[2026-02-13 23:30:07.693][DEBUG] [BunVFS/PE]   Section[6] '.edata': RawSize=0x200, RawPtr=0x76200
+[2026-02-13 23:30:07.693][DEBUG] [BunVFS/PE]   Section[7] '.idata': RawSize=0x1400, RawPtr=0x76400
+[2026-02-13 23:30:07.693][DEBUG] [BunVFS/PE]   Section[8] '.tls': RawSize=0x200, RawPtr=0x77800
+[2026-02-13 23:30:07.693][DEBUG] [BunVFS/PE]   Section[9] '.reloc': RawSize=0x800, RawPtr=0x77A00
+[2026-02-13 23:30:07.693][DEBUG] [BunVFS/PE] Size after sections: 0x78200
+[2026-02-13 23:30:07.693][DEBUG] [BunVFS/PE] Size after cert+debug: 0x78200
+[2026-02-13 23:30:07.693][INFO] [BunVFS/PE] Validated DLL: PE32+(x64), 10 sections, computed size=492032 bytes (0x78200)
+[2026-02-13 23:30:07.693][DEBUG] [BunVFS/Export] Export DLL name: 'rust_pty.dll'
+[2026-02-13 23:30:07.693][DEBUG] [BunVFS/Export] Export directory: RVA=0x7B000, fileOff=0x76200, numberOfNames=8, namesRVA=0x7B048
+[2026-02-13 23:30:07.693][DEBUG] [BunVFS/Export]   [0] 'bun_pty_close'
+[2026-02-13 23:30:07.693][DEBUG] [BunVFS/Export]   [1] 'bun_pty_get_exit_code'
+[2026-02-13 23:30:07.693][DEBUG] [BunVFS/Export]   [2] 'bun_pty_get_pid'
+[2026-02-13 23:30:07.693][DEBUG] [BunVFS/Export]   [3] 'bun_pty_kill'
+[2026-02-13 23:30:07.695][DEBUG] [BunVFS/Export]   [4] 'bun_pty_read'
+[2026-02-13 23:30:07.695][DEBUG] [BunVFS/Export]   [5] 'bun_pty_resize'
+[2026-02-13 23:30:07.695][DEBUG] [BunVFS/Export]   [6] 'bun_pty_spawn'
+[2026-02-13 23:30:07.695][DEBUG] [BunVFS/Export]   [7] 'bun_pty_write'
+[2026-02-13 23:30:07.695][WARN] [BunVFS/Export] Symbol 'setLogCallback' NOT found among 8 exports.
+[2026-02-13 23:30:07.695][INFO] [BunVFS] PE candidate at offset 0x93DE6A2: size=492032, exports=8, hasSetLogCallback=NO
+[2026-02-13 23:30:07.696][DEBUG] [BunVFS/PE] COFF header: machine=0x8664, sections=7, optHdrSize=240, chars=0x2022
+[2026-02-13 23:30:07.696][DEBUG] [BunVFS/PE] Format: PE32+ (64-bit)
+[2026-02-13 23:30:07.696][DEBUG] [BunVFS/PE] SizeOfHeaders=0x400, FileAlignment=0x200, SizeOfImage=0x510000
+[2026-02-13 23:30:07.696][DEBUG] [BunVFS/PE] NumberOfRvaAndSizes=16
+[2026-02-13 23:30:07.696][DEBUG] [BunVFS/PE]   Section[0] '.text': RawSize=0x90C00, RawPtr=0x400
+[2026-02-13 23:30:07.697][DEBUG] [BunVFS/PE]   Section[1] '.rdata': RawSize=0x75A00, RawPtr=0x91000
+[2026-02-13 23:30:07.697][DEBUG] [BunVFS/PE]   Section[2] '.buildid': RawSize=0x200, RawPtr=0x106A00
+[2026-02-13 23:30:07.697][DEBUG] [BunVFS/PE]   Section[3] '.data': RawSize=0x200, RawPtr=0x106C00
+[2026-02-13 23:30:07.697][DEBUG] [BunVFS/PE]   Section[4] '.pdata': RawSize=0x2E00, RawPtr=0x106E00
+[2026-02-13 23:30:07.697][DEBUG] [BunVFS/PE]   Section[5] '.tls': RawSize=0x200, RawPtr=0x109C00
+[2026-02-13 23:30:07.697][DEBUG] [BunVFS/PE]   Section[6] '.reloc': RawSize=0x200, RawPtr=0x109E00
+[2026-02-13 23:30:07.697][DEBUG] [BunVFS/PE] Size after sections: 0x10A000
+[2026-02-13 23:30:07.697][DEBUG] [BunVFS/PE] Debug directory: RVA=0x108000, fileOff=0x106A00, entries=2
+[2026-02-13 23:30:07.697][DEBUG] [BunVFS/PE] Size after cert+debug: 0x10A000
+[2026-02-13 23:30:07.697][INFO] [BunVFS/PE] Validated DLL: PE32+(x64), 7 sections, computed size=1089536 bytes (0x10A000)
+[2026-02-13 23:30:07.697][DEBUG] [BunVFS/Export] Export DLL name: 'opentui.dll'
+[2026-02-13 23:30:07.697][DEBUG] [BunVFS/Export] Export directory: RVA=0x101738, fileOff=0x100738, numberOfNames=237, namesRVA=0x101B20
+[2026-02-13 23:30:07.697][DEBUG] [BunVFS/Export]   [0] '_DllMainCRTStartup'
+[2026-02-13 23:30:07.697][DEBUG] [BunVFS/Export]   [1] '__xl_a'
+[2026-02-13 23:30:07.697][DEBUG] [BunVFS/Export]   [2] '__xl_z'
+[2026-02-13 23:30:07.697][DEBUG] [BunVFS/Export]   [3] '_tls_end'
+[2026-02-13 23:30:07.697][DEBUG] [BunVFS/Export]   [4] '_tls_index'
+[2026-02-13 23:30:07.697][DEBUG] [BunVFS/Export]   [5] '_tls_start'
+[2026-02-13 23:30:07.697][DEBUG] [BunVFS/Export]   [6] '_tls_used'
+[2026-02-13 23:30:07.697][DEBUG] [BunVFS/Export]   [7] 'addToCurrentHitGridClipped'
+[2026-02-13 23:30:07.697][DEBUG] [BunVFS/Export]   [8] 'addToHitGrid'
+[2026-02-13 23:30:07.697][DEBUG] [BunVFS/Export]   [9] 'attributesGetLinkId'
+[2026-02-13 23:30:07.697][DEBUG] [BunVFS/Export]   [10] 'attributesWithLink'
+[2026-02-13 23:30:07.697][DEBUG] [BunVFS/Export]   [11] 'bufferClear'
+[2026-02-13 23:30:07.697][DEBUG] [BunVFS/Export]   [12] 'bufferClearOpacity'
+[2026-02-13 23:30:07.697][DEBUG] [BunVFS/Export]   [13] 'bufferClearScissorRects'
+[2026-02-13 23:30:07.697][DEBUG] [BunVFS/Export]   [14] 'bufferDrawBox'
+[2026-02-13 23:30:07.697][DEBUG] [BunVFS/Export]   [15] 'bufferDrawChar'
+[2026-02-13 23:30:07.697][DEBUG] [BunVFS/Export]   [16] 'bufferDrawEditorView'
+[2026-02-13 23:30:07.697][DEBUG] [BunVFS/Export]   [17] 'bufferDrawGrayscaleBuffer'
+[2026-02-13 23:30:07.697][DEBUG] [BunVFS/Export]   [18] 'bufferDrawGrayscaleBufferSupersampled'
+[2026-02-13 23:30:07.698][DEBUG] [BunVFS/Export]   [19] 'bufferDrawPackedBuffer'
+[2026-02-13 23:30:07.698][DEBUG] [BunVFS/Export]   ... (217 more exports not shown)
+[2026-02-13 23:30:07.698][INFO] [BunVFS/Export] *** Found target symbol 'setLogCallback' at export index 174 ***
+[2026-02-13 23:30:07.698][INFO] [BunVFS] PE candidate at offset 0x9791AFD: size=1089536, exports=237, hasSetLogCallback=YES
+[2026-02-13 23:30:07.698][INFO] [BunVFS] Found 3 PE DLL candidate(s).
+[2026-02-13 23:30:07.698][INFO] [BunVFS] Selected candidate #2: offset=0x9791AFD, size=1089536, exports=237
+[2026-02-13 23:30:07.699][INFO] [BunVFS] Extracted 1089536 bytes to: F:\Project\git\appcontainer\AppContainer\x64\Release\bun_vfs_staging\~BUN\root\opentui-txxqvfz2.dll
+[2026-02-13 23:30:07.714][INFO] [BunVFS/Verify] Verifying extracted DLL: F:\Project\git\appcontainer\AppContainer\x64\Release\bun_vfs_staging\~BUN\root\opentui-txxqvfz2.dll
+[2026-02-13 23:30:07.728][DEBUG] [BunVFS/Verify] File size: 1089536 bytes (0x10A000)
+[2026-02-13 23:30:07.728][DEBUG] [BunVFS/Verify] PASS: MZ signature present
+[2026-02-13 23:30:07.728][DEBUG] [BunVFS/Verify] PASS: PE signature at offset 0x78
+[2026-02-13 23:30:07.729][DEBUG] [BunVFS/Verify] PASS: DLL flag set (chars=0x2022)
+[2026-02-13 23:30:07.729][DEBUG] [BunVFS/Verify] Checking 7 sections for file bounds...
+[2026-02-13 23:30:07.729][DEBUG] [BunVFS/Verify]   Section[0] '.text': OK (end=0x91000)
+[2026-02-13 23:30:07.729][DEBUG] [BunVFS/Verify]   Section[1] '.rdata': OK (end=0x106A00)
+[2026-02-13 23:30:07.729][DEBUG] [BunVFS/Verify]   Section[2] '.buildid': OK (end=0x106C00)
+[2026-02-13 23:30:07.729][DEBUG] [BunVFS/Verify]   Section[3] '.data': OK (end=0x106E00)
+[2026-02-13 23:30:07.729][DEBUG] [BunVFS/Verify]   Section[4] '.pdata': OK (end=0x109C00)
+[2026-02-13 23:30:07.729][DEBUG] [BunVFS/Verify]   Section[5] '.tls': OK (end=0x109E00)
+[2026-02-13 23:30:07.729][DEBUG] [BunVFS/Verify]   Section[6] '.reloc': OK (end=0x10A000)
+[2026-02-13 23:30:07.729][DEBUG] [BunVFS/Verify] PASS: All sections within file bounds
+[2026-02-13 23:30:07.729][DEBUG] [BunVFS/Export] Export DLL name: 'opentui.dll'
+[2026-02-13 23:30:07.729][DEBUG] [BunVFS/Export] Export directory: RVA=0x101738, fileOff=0x100738, numberOfNames=237, namesRVA=0x101B20
+[2026-02-13 23:30:07.729][DEBUG] [BunVFS/Export]   [0] '_DllMainCRTStartup'
+[2026-02-13 23:30:07.729][DEBUG] [BunVFS/Export]   [1] '__xl_a'
+[2026-02-13 23:30:07.729][DEBUG] [BunVFS/Export]   [2] '__xl_z'
+[2026-02-13 23:30:07.730][DEBUG] [BunVFS/Export]   [3] '_tls_end'
+[2026-02-13 23:30:07.730][DEBUG] [BunVFS/Export]   [4] '_tls_index'
+[2026-02-13 23:30:07.730][DEBUG] [BunVFS/Export]   [5] '_tls_start'
+[2026-02-13 23:30:07.730][DEBUG] [BunVFS/Export]   [6] '_tls_used'
+[2026-02-13 23:30:07.730][DEBUG] [BunVFS/Export]   [7] 'addToCurrentHitGridClipped'
+[2026-02-13 23:30:07.730][DEBUG] [BunVFS/Export]   [8] 'addToHitGrid'
+[2026-02-13 23:30:07.730][DEBUG] [BunVFS/Export]   [9] 'attributesGetLinkId'
+[2026-02-13 23:30:07.730][DEBUG] [BunVFS/Export]   [10] 'attributesWithLink'
+[2026-02-13 23:30:07.730][DEBUG] [BunVFS/Export]   [11] 'bufferClear'
+[2026-02-13 23:30:07.730][DEBUG] [BunVFS/Export]   [12] 'bufferClearOpacity'
+[2026-02-13 23:30:07.730][DEBUG] [BunVFS/Export]   [13] 'bufferClearScissorRects'
+[2026-02-13 23:30:07.731][DEBUG] [BunVFS/Export]   [14] 'bufferDrawBox'
+[2026-02-13 23:30:07.731][DEBUG] [BunVFS/Export]   [15] 'bufferDrawChar'
+[2026-02-13 23:30:07.731][DEBUG] [BunVFS/Export]   [16] 'bufferDrawEditorView'
+[2026-02-13 23:30:07.731][DEBUG] [BunVFS/Export]   [17] 'bufferDrawGrayscaleBuffer'
+[2026-02-13 23:30:07.731][DEBUG] [BunVFS/Export]   [18] 'bufferDrawGrayscaleBufferSupersampled'
+[2026-02-13 23:30:07.731][DEBUG] [BunVFS/Export]   [19] 'bufferDrawPackedBuffer'
+[2026-02-13 23:30:07.731][DEBUG] [BunVFS/Export]   ... (217 more exports not shown)
+[2026-02-13 23:30:07.731][INFO] [BunVFS/Export] *** Found target symbol 'setLogCallback' at export index 174 ***
+[2026-02-13 23:30:07.731][INFO] [BunVFS/Verify] DLL has 237 exports, setLogCallback=FOUND
+[2026-02-13 23:30:07.731][INFO] [BunVFS/Verify] PASS: Required export 'setLogCallback' present
+[2026-02-13 23:30:07.731][INFO] [BunVFS/Verify] ===== DLL VERIFICATION PASSED ===== F:\Project\git\appcontainer\AppContainer\x64\Release\bun_vfs_staging\~BUN\root\opentui-txxqvfz2.dll (1089536 bytes)
+[2026-02-13 23:30:07.731][INFO] [BunVFS] Mapped B: -> F:\Project\git\appcontainer\AppContainer\x64\Release\bun_vfs_staging
+[2026-02-13 23:30:07.731][INFO] [BunVFS] Auto-allowed path: F:\Project\git\appcontainer\AppContainer\x64\Release\bun_vfs_staging
+[2026-02-13 23:30:07.731][INFO] [Profile] Creating AppContainer profile: moniker='OpenCodeContainer', display='OpenCode AppContainer', caps=3
+[2026-02-13 23:30:07.746][INFO] [Profile] Created new profile. SID=S-1-15-2-3119325083-3877019020-4262433807-3826958641-1237694064-3878085498-1640039146
+[2026-02-13 23:30:07.746][INFO] [Permissions] Granting access to 9 allowed path(s)...
+[2026-02-13 23:30:07.746][DEBUG] [Permissions] Processing path: F:\Project\git\appcontainer\AppContainer\x64\Release\opencode (attrs=0x00000010)
+[2026-02-13 23:30:07.747][DEBUG] [Security] Saving original security descriptor for: F:\Project\git\appcontainer\AppContainer\x64\Release\opencode
+[2026-02-13 23:30:07.747][INFO] [Security] Backed up DACL for F:\Project\git\appcontainer\AppContainer\x64\Release\opencode (protected=0, revision=1)
+[2026-02-13 23:30:07.747][INFO] [Security] Backed up Label SACL for F:\Project\git\appcontainer\AppContainer\x64\Release\opencode
+[2026-02-13 23:30:07.747][DEBUG] [ACL] GrantFullControl on: F:\Project\git\appcontainer\AppContainer\x64\Release\opencode
+[2026-02-13 23:30:07.761][DEBUG] [ACL] Successfully granted FILE_ALL_ACCESS on: F:\Project\git\appcontainer\AppContainer\x64\Release\opencode
+[2026-02-13 23:30:07.761][INFO] [Permissions] Granted FILE_ALL_ACCESS on F:\Project\git\appcontainer\AppContainer\x64\Release\opencode
+[2026-02-13 23:30:07.761][DEBUG] [Permissions] Processing path: F:\Project\git\appcontainer\AppContainer\x64\Release\opencode\work (attrs=0x00000010)
+[2026-02-13 23:30:07.761][DEBUG] [Security] Saving original security descriptor for: F:\Project\git\appcontainer\AppContainer\x64\Release\opencode\work
+[2026-02-13 23:30:07.761][INFO] [Security] Backed up DACL for F:\Project\git\appcontainer\AppContainer\x64\Release\opencode\work (protected=0, revision=1)
+[2026-02-13 23:30:07.761][INFO] [Security] Backed up Label SACL for F:\Project\git\appcontainer\AppContainer\x64\Release\opencode\work
+[2026-02-13 23:30:07.761][DEBUG] [ACL] GrantFullControl on: F:\Project\git\appcontainer\AppContainer\x64\Release\opencode\work
+[2026-02-13 23:30:07.766][DEBUG] [ACL] Successfully granted FILE_ALL_ACCESS on: F:\Project\git\appcontainer\AppContainer\x64\Release\opencode\work
+[2026-02-13 23:30:07.766][INFO] [Permissions] Granted FILE_ALL_ACCESS on F:\Project\git\appcontainer\AppContainer\x64\Release\opencode\work
+[2026-02-13 23:30:07.766][DEBUG] [Permissions] Processing path: F:\Project\git\appcontainer\AppContainer\x64\Release\opencode\config (attrs=0x00000010)
+[2026-02-13 23:30:07.766][DEBUG] [Security] Saving original security descriptor for: F:\Project\git\appcontainer\AppContainer\x64\Release\opencode\config
+[2026-02-13 23:30:07.767][INFO] [Security] Backed up DACL for F:\Project\git\appcontainer\AppContainer\x64\Release\opencode\config (protected=0, revision=1)
+[2026-02-13 23:30:07.767][INFO] [Security] Backed up Label SACL for F:\Project\git\appcontainer\AppContainer\x64\Release\opencode\config
+[2026-02-13 23:30:07.767][DEBUG] [ACL] GrantFullControl on: F:\Project\git\appcontainer\AppContainer\x64\Release\opencode\config
+[2026-02-13 23:30:07.767][DEBUG] [ACL] Successfully granted FILE_ALL_ACCESS on: F:\Project\git\appcontainer\AppContainer\x64\Release\opencode\config
+[2026-02-13 23:30:07.767][INFO] [Permissions] Granted FILE_ALL_ACCESS on F:\Project\git\appcontainer\AppContainer\x64\Release\opencode\config
+[2026-02-13 23:30:07.767][DEBUG] [Permissions] Processing path: F:\Project\git\appcontainer\AppContainer\x64\Release\opencode\cache (attrs=0x00000010)
+[2026-02-13 23:30:07.767][DEBUG] [Security] Saving original security descriptor for: F:\Project\git\appcontainer\AppContainer\x64\Release\opencode\cache
+[2026-02-13 23:30:07.767][INFO] [Security] Backed up DACL for F:\Project\git\appcontainer\AppContainer\x64\Release\opencode\cache (protected=0, revision=1)
+[2026-02-13 23:30:07.768][INFO] [Security] Backed up Label SACL for F:\Project\git\appcontainer\AppContainer\x64\Release\opencode\cache
+[2026-02-13 23:30:07.768][DEBUG] [ACL] GrantFullControl on: F:\Project\git\appcontainer\AppContainer\x64\Release\opencode\cache
+[2026-02-13 23:30:07.768][DEBUG] [ACL] Successfully granted FILE_ALL_ACCESS on: F:\Project\git\appcontainer\AppContainer\x64\Release\opencode\cache
+[2026-02-13 23:30:07.768][INFO] [Permissions] Granted FILE_ALL_ACCESS on F:\Project\git\appcontainer\AppContainer\x64\Release\opencode\cache
+[2026-02-13 23:30:07.768][DEBUG] [Permissions] Processing path: F:\Project\git\appcontainer\AppContainer\x64\Release\opencode\data (attrs=0x00000010)
+[2026-02-13 23:30:07.768][DEBUG] [Security] Saving original security descriptor for: F:\Project\git\appcontainer\AppContainer\x64\Release\opencode\data
+[2026-02-13 23:30:07.768][INFO] [Security] Backed up DACL for F:\Project\git\appcontainer\AppContainer\x64\Release\opencode\data (protected=0, revision=1)
+[2026-02-13 23:30:07.768][INFO] [Security] Backed up Label SACL for F:\Project\git\appcontainer\AppContainer\x64\Release\opencode\data
+[2026-02-13 23:30:07.769][DEBUG] [ACL] GrantFullControl on: F:\Project\git\appcontainer\AppContainer\x64\Release\opencode\data
+[2026-02-13 23:30:07.777][DEBUG] [ACL] Successfully granted FILE_ALL_ACCESS on: F:\Project\git\appcontainer\AppContainer\x64\Release\opencode\data
+[2026-02-13 23:30:07.777][INFO] [Permissions] Granted FILE_ALL_ACCESS on F:\Project\git\appcontainer\AppContainer\x64\Release\opencode\data
+[2026-02-13 23:30:07.777][DEBUG] [Permissions] Processing path: F:\Project\git\appcontainer\AppContainer\x64\Release\opencode\temp (attrs=0x00000010)
+[2026-02-13 23:30:07.777][DEBUG] [Security] Saving original security descriptor for: F:\Project\git\appcontainer\AppContainer\x64\Release\opencode\temp
+[2026-02-13 23:30:07.777][INFO] [Security] Backed up DACL for F:\Project\git\appcontainer\AppContainer\x64\Release\opencode\temp (protected=0, revision=1)
+[2026-02-13 23:30:07.778][INFO] [Security] Backed up Label SACL for F:\Project\git\appcontainer\AppContainer\x64\Release\opencode\temp
+[2026-02-13 23:30:07.778][DEBUG] [ACL] GrantFullControl on: F:\Project\git\appcontainer\AppContainer\x64\Release\opencode\temp
+[2026-02-13 23:30:07.778][DEBUG] [ACL] Successfully granted FILE_ALL_ACCESS on: F:\Project\git\appcontainer\AppContainer\x64\Release\opencode\temp
+[2026-02-13 23:30:07.778][INFO] [Permissions] Granted FILE_ALL_ACCESS on F:\Project\git\appcontainer\AppContainer\x64\Release\opencode\temp
+[2026-02-13 23:30:07.778][DEBUG] [Permissions] Processing path: F:\Project\git\appcontainer\AppContainer\x64\Release\opencode\data\opencode\bin (attrs=0x00000010)
+[2026-02-13 23:30:07.779][DEBUG] [Security] Saving original security descriptor for: F:\Project\git\appcontainer\AppContainer\x64\Release\opencode\data\opencode\bin
+[2026-02-13 23:30:07.779][INFO] [Security] Backed up DACL for F:\Project\git\appcontainer\AppContainer\x64\Release\opencode\data\opencode\bin (protected=0, revision=1)
+[2026-02-13 23:30:07.779][INFO] [Security] Backed up Label SACL for F:\Project\git\appcontainer\AppContainer\x64\Release\opencode\data\opencode\bin
+[2026-02-13 23:30:07.779][DEBUG] [ACL] GrantFullControl on: F:\Project\git\appcontainer\AppContainer\x64\Release\opencode\data\opencode\bin
+[2026-02-13 23:30:07.779][DEBUG] [ACL] Successfully granted FILE_ALL_ACCESS on: F:\Project\git\appcontainer\AppContainer\x64\Release\opencode\data\opencode\bin
+[2026-02-13 23:30:07.779][INFO] [Permissions] Granted FILE_ALL_ACCESS on F:\Project\git\appcontainer\AppContainer\x64\Release\opencode\data\opencode\bin
+[2026-02-13 23:30:07.779][DEBUG] [Permissions] Processing path: F:\Project\git\appcontainer (attrs=0x00000010)
+[2026-02-13 23:30:07.779][DEBUG] [Security] Saving original security descriptor for: F:\Project\git\appcontainer
+[2026-02-13 23:30:07.779][INFO] [Security] Backed up DACL for F:\Project\git\appcontainer (protected=0, revision=1)
+[2026-02-13 23:30:07.779][INFO] [Security] Backed up Label SACL for F:\Project\git\appcontainer
+[2026-02-13 23:30:07.779][DEBUG] [ACL] GrantFullControl on: F:\Project\git\appcontainer
+[2026-02-13 23:30:07.798][DEBUG] [ACL] Successfully granted FILE_ALL_ACCESS on: F:\Project\git\appcontainer
+[2026-02-13 23:30:07.799][INFO] [Permissions] Granted FILE_ALL_ACCESS on F:\Project\git\appcontainer
+[2026-02-13 23:30:07.799][DEBUG] [Permissions] Processing path: F:\Project\git\appcontainer\AppContainer\x64\Release\bun_vfs_staging (attrs=0x00000010)
+[2026-02-13 23:30:07.799][DEBUG] [Security] Saving original security descriptor for: F:\Project\git\appcontainer\AppContainer\x64\Release\bun_vfs_staging
+[2026-02-13 23:30:07.799][INFO] [Security] Backed up DACL for F:\Project\git\appcontainer\AppContainer\x64\Release\bun_vfs_staging (protected=0, revision=1)
+[2026-02-13 23:30:07.799][INFO] [Security] Backed up Label SACL for F:\Project\git\appcontainer\AppContainer\x64\Release\bun_vfs_staging
+[2026-02-13 23:30:07.799][DEBUG] [ACL] GrantFullControl on: F:\Project\git\appcontainer\AppContainer\x64\Release\bun_vfs_staging
+[2026-02-13 23:30:07.800][DEBUG] [ACL] Successfully granted FILE_ALL_ACCESS on: F:\Project\git\appcontainer\AppContainer\x64\Release\bun_vfs_staging
+[2026-02-13 23:30:07.800][INFO] [Permissions] Granted FILE_ALL_ACCESS on F:\Project\git\appcontainer\AppContainer\x64\Release\bun_vfs_staging
+[2026-02-13 23:30:07.800][INFO] [Permissions] Access grant summary: granted=9, skipped=0, failed=0 (total paths=9)
+[2026-02-13 23:30:07.800][INFO] [Permissions] Granting read/execute to 2 read-only path(s)...
+[2026-02-13 23:30:07.800][DEBUG] [Security] Saving original security descriptor for: C:\Windows\system32
+[2026-02-13 23:30:07.800][INFO] [Security] Backed up DACL for C:\Windows\system32 (protected=1, revision=1)
+[2026-02-13 23:30:07.800][INFO] [Security] Backed up Label SACL for C:\Windows\system32
+[2026-02-13 23:30:07.800][DEBUG] [ACL] GrantReadExecute on: C:\Windows\system32
+[2026-02-13 23:30:07.801][ERROR] [ACL] SetNamedSecurityInfoW (DACL) failed on C:\Windows\system32: err=5
+[2026-02-13 23:30:07.801][WARN] [Permissions] Grant (RX) failed on C:\Windows\system32 (err=5)
+[2026-02-13 23:30:07.801][DEBUG] [Security] Saving original security descriptor for: C:\Windows
+[2026-02-13 23:30:07.801][INFO] [Security] Backed up DACL for C:\Windows (protected=1, revision=1)
+[2026-02-13 23:30:07.801][INFO] [Security] Backed up Label SACL for C:\Windows
+[2026-02-13 23:30:07.801][DEBUG] [ACL] GrantReadExecute on: C:\Windows
+[2026-02-13 23:30:07.801][ERROR] [ACL] SetNamedSecurityInfoW (DACL) failed on C:\Windows: err=5
+[2026-02-13 23:30:07.801][WARN] [Permissions] Grant (RX) failed on C:\Windows (err=5)
+[2026-02-13 23:30:07.802][INFO] [Permissions] Read-only grant summary: granted=0, skipped=0, failed=2
+[2026-02-13 23:30:07.802][INFO] [Env] Building child environment block...
+[2026-02-13 23:30:07.802][DEBUG] [Env] New var: HOME = F:\Project\git\appcontainer\AppContainer\x64\Release\opencode\work
+[2026-02-13 23:30:07.802][DEBUG] [Env] Override: USERPROFILE = F:\Project\git\appcontainer\AppContainer\x64\Release\opencode\work (was: C:\Users\tao)
+[2026-02-13 23:30:07.802][DEBUG] [Env] Override: APPDATA = F:\Project\git\appcontainer\AppContainer\x64\Release\opencode\config (was: C:\Users\tao\AppData\Roaming)
+[2026-02-13 23:30:07.802][DEBUG] [Env] Override: LOCALAPPDATA = F:\Project\git\appcontainer\AppContainer\x64\Release (was: C:\Users\tao\AppData\Local)
+[2026-02-13 23:30:07.802][DEBUG] [Env] Override: TEMP = F:\Project\git\appcontainer\AppContainer\x64\Release\opencode\temp (was: C:\Users\tao\AppData\Local\Temp)
+[2026-02-13 23:30:07.802][DEBUG] [Env] Override: TMP = F:\Project\git\appcontainer\AppContainer\x64\Release\opencode\temp (was: C:\Users\tao\AppData\Local\Temp)
+[2026-02-13 23:30:07.802][DEBUG] [Env] New var: XDG_CONFIG_HOME = F:\Project\git\appcontainer\AppContainer\x64\Release\opencode\config
+[2026-02-13 23:30:07.802][DEBUG] [Env] New var: XDG_CACHE_HOME = F:\Project\git\appcontainer\AppContainer\x64\Release\opencode\cache
+[2026-02-13 23:30:07.802][DEBUG] [Env] New var: XDG_DATA_HOME = F:\Project\git\appcontainer\AppContainer\x64\Release\opencode\data
+[2026-02-13 23:30:07.802][DEBUG] [Env] New var: OPENCODE_CONFIG = F:\Project\git\appcontainer\AppContainer\x64\Release\opencode\opencode.json
+[2026-02-13 23:30:07.802][INFO] [Env] Environment block built: 70 entries, 4848 wchars
+[2026-02-13 23:30:07.802][INFO] [Launch] Preparing to launch: F:\Project\git\appcontainer\opencode.exe
+[2026-02-13 23:30:07.802][INFO] [Launch] Console pre-configured for TUI (inherited mode, Quick Edit disabled).
+[2026-02-13 23:30:07.804][INFO] [Launch] Working directory: F:\Project\git\appcontainer\AppContainer\x64\Release\opencode\work
+[2026-02-13 23:30:07.804][INFO] [Launch] CreateProcessW: flags=0x00080400, cmd='F:\Project\git\appcontainer\opencode.exe'
+[2026-02-13 23:30:07.808][INFO] [Launch] Process created: PID=16668, TID=33492
+[2026-02-13 23:30:07.808][INFO] [Launch] Waiting for child exit (console inherited)...
+[2026-02-13 23:32:07.026][INFO] [Launch] Child exited with code: -1073741510
+[2026-02-13 23:32:07.026][INFO] [Launch] Console state restored.
+[2026-02-13 23:32:07.028][INFO] [Cleanup] Starting cleanup sequence...
+[2026-02-13 23:32:07.028][WARN] [Ctrl] Console control event: 2
+[2026-02-13 23:32:07.028][INFO] [Revert] Restoring original security on 9 path(s)...
+[2026-02-13 23:32:07.028][DEBUG] [Revert] RestoreSavedSecurityOnce already executed, skipping.
+[2026-02-13 23:32:07.028][INFO] [BunVFS] Removed B: drive mapping.
+[2026-02-13 23:32:07.028][INFO] [BunVFS] Cleaned up staging dir: F:\Project\git\appcontainer\AppContainer\x64\Release\bun_vfs_staging

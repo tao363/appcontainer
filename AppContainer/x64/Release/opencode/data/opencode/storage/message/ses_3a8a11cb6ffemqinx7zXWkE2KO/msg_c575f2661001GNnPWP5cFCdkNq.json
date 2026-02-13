@@ -1,0 +1,17 @@
+{
+  "id": "msg_c575f2661001GNnPWP5cFCdkNq",
+  "sessionID": "ses_3a8a11cb6ffemqinx7zXWkE2KO",
+  "role": "user",
+  "time": {
+    "created": 1770992379494
+  },
+  "summary": {
+    "title": "中文模型问答对话",
+    "diffs": []
+  },
+  "agent": "build",
+  "model": {
+    "providerID": "opencode",
+    "modelID": "big-pickle"
+  }
+}

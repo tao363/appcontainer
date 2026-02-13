@@ -1,0 +1,17 @@
+{
+  "id": "msg_c576b72b7001nNOJF6xRmAzo2w",
+  "sessionID": "ses_3a8948d4bffeavbh9FlOITsrMO",
+  "role": "user",
+  "time": {
+    "created": 1770993185476
+  },
+  "summary": {
+    "title": "干饭干饭主题讨论",
+    "diffs": []
+  },
+  "agent": "build",
+  "model": {
+    "providerID": "opencode",
+    "modelID": "big-pickle"
+  }
+}

@@ -1,0 +1,30 @@
+{
+  "id": "msg_c576cfdaf0013k3sUG3xV3XI6K",
+  "sessionID": "ses_3a8948d4bffeavbh9FlOITsrMO",
+  "role": "assistant",
+  "time": {
+    "created": 1770993286575,
+    "completed": 1770993297651
+  },
+  "parentID": "msg_c576ca339001AW7EQMMdshwnlA",
+  "modelID": "big-pickle",
+  "providerID": "opencode",
+  "mode": "build",
+  "agent": "build",
+  "path": {
+    "cwd": "F:\\Project\\git\\appcontainer\\AppContainer\\x64\\Release\\opencode\\work",
+    "root": "F:\\Project\\git\\appcontainer"
+  },
+  "cost": 0,
+  "tokens": {
+    "total": 13073,
+    "input": 170,
+    "output": 45,
+    "reasoning": 23,
+    "cache": {
+      "read": 12858,
+      "write": 0
+    }
+  },
+  "finish": "stop"
+}

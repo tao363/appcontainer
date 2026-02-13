@@ -1,0 +1,11 @@
+{
+  "id": "prt_c576b9e9a001Nrs4tnOJpNj0V1",
+  "sessionID": "ses_3a8948d4bffeavbh9FlOITsrMO",
+  "messageID": "msg_c576b94b3001D0ZHHpunQhO8u9",
+  "type": "reasoning",
+  "text": "The user sent a partial message that seems to have been cut off. They started to type something like \"C:\\U...\" but it got truncated. I should ask them to complete their message or provide more context about what they need help with.",
+  "time": {
+    "start": 1770993196698,
+    "end": 1770993198169
+  }
+}

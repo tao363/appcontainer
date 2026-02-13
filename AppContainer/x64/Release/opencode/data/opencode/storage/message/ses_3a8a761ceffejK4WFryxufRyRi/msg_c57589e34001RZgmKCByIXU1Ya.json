@@ -1,0 +1,17 @@
+{
+  "id": "msg_c57589e34001RZgmKCByIXU1Ya",
+  "sessionID": "ses_3a8a761ceffejK4WFryxufRyRi",
+  "role": "user",
+  "time": {
+    "created": 1770991951421
+  },
+  "summary": {
+    "title": "Greeting in Chinese: 你好",
+    "diffs": []
+  },
+  "agent": "build",
+  "model": {
+    "providerID": "opencode",
+    "modelID": "big-pickle"
+  }
+}
