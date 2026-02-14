@@ -8,6 +8,7 @@
 #include <sddl.h>
 #include <Aclapi.h>
 #include <shellapi.h>
+#include <detours.h>
 
 #include <algorithm>
 #include <cstdarg>
@@ -119,6 +120,12 @@ static bool UseConPty = false;
 static bool HideParentConsole = true;
 static bool g_LogEnabled = false;
 static bool g_SuppressConsoleLog = false;
+
+// Network Filter state
+static std::wstring g_NetFilterDefault;    // "allow" or "block"
+static std::wstring g_NetFilterConnect;    // semicolon-separated connect rules
+static std::wstring g_NetFilterDns;        // semicolon-separated DNS rules
+static bool g_NetFilterEnabled = false;    // true if any filter config is present
 
 // Bun Virtual Drive (B:\~BUN) state
 static volatile LONG g_BunCleanupDone = 0;
@@ -984,10 +991,12 @@ static void PrintUsage() {
 	wprintf(L"\t-k : Enable win32k lockdown\r\n");
 	wprintf(L"\t-x : Cleanup: recursively delete subdirectories under -a paths after exit (keep roots)\r\n");
 	wprintf(L"\t-g : Enable logging (console + file)\r\n");
+	wprintf(L"\t-n : Network filter rules: \"policy;connectRule1;...;dns:domain1;...\"\r\n");
+	wprintf(L"\t     Example: -n \"block;allow:tcp:*:443;allow:*:*:53;dns:allow:api.example.com\"\r\n");
 	wprintf(L"\r\n");
 	wprintf(L"Notes:\r\n");
 	wprintf(L"\t- Child shares current console window.\r\n");
-	wprintf(L"\t- config.ini [App] is auto-loaded when no CLI args.\r\n");
+	wprintf(L"\t- config.ini [App] and [NetworkFilter] auto-loaded when no CLI args.\r\n");
 	wprintf(L"\t- For bun/bun.exe, %%BUN_INSTALL%%\\root is auto-added to allowPaths and PATH.\r\n");
 }
 
@@ -1170,6 +1179,44 @@ static bool ParseArguments(int argc, WCHAR** argv) {
 		case L'k': NoWin32k = true; LogDebug(L"[Args] noWin32k=true"); break;
 		case L'x': CleanupAllowedSubdirs = true; LogDebug(L"[Args] cleanupSubdirs=true"); break;
 		case L'g': g_LogEnabled = true; LogDebug(L"[Args] log=true"); break;
+		case L'n':
+			if (i + 1 >= argc) { PrintUsage(); return false; }
+			{
+				// -n "defaultPolicy;connectRule1;connectRule2;dns:domain1;dns:domain2"
+				// First token is default policy, then connect rules or "dns:..." for DNS rules
+				std::wstring arg = argv[++i];
+				std::vector<wchar_t> buf(arg.begin(), arg.end());
+				buf.push_back(L'\0');
+				WCHAR* ctx = nullptr;
+				bool first = true;
+				std::wstring connectParts, dnsParts;
+				for (WCHAR* tok = wcstok_s(buf.data(), L";", &ctx);
+					tok != nullptr; tok = wcstok_s(nullptr, L";", &ctx))
+				{
+					std::wstring t = TrimCopy(tok);
+					if (t.empty()) continue;
+					if (first) {
+						g_NetFilterDefault = t;
+						first = false;
+					}
+					else if (_wcsnicmp(t.c_str(), L"dns:", 4) == 0) {
+						// DNS rule: strip "dns:" prefix
+						if (!dnsParts.empty()) dnsParts += L';';
+						dnsParts += t.substr(4);
+					}
+					else {
+						// Connect rule
+						if (!connectParts.empty()) connectParts += L';';
+						connectParts += t;
+					}
+				}
+				g_NetFilterConnect = connectParts;
+				g_NetFilterDns = dnsParts;
+				g_NetFilterEnabled = true;
+				LogInfo(L"[Args] networkFilter: default=%ls, connect=%ls, dns=%ls",
+					g_NetFilterDefault.c_str(), g_NetFilterConnect.c_str(), g_NetFilterDns.c_str());
+			}
+			break;
 		default:
 			LogWarn(L"[Args] Unknown option: %ls", argv[i]);
 			break;
@@ -2523,6 +2570,7 @@ static bool LoadConfigFromIni() {
 
 	// Parse line by line
 	bool inAppSection = false;
+	bool inNetFilterSection = false;
 	bool foundExe = false;
 	bool foundMoniker = false;
 
@@ -2548,11 +2596,13 @@ static bool LoadConfigFromIni() {
 		if (trimmed.front() == L'[' && trimmed.back() == L']') {
 			std::wstring section = TrimCopy(trimmed.substr(1, trimmed.size() - 2));
 			inAppSection = IEquals(section, L"App");
-			LogDebug(L"[Config] Section: [%ls] (active=%ls)", section.c_str(), inAppSection ? L"yes" : L"no");
+			inNetFilterSection = IEquals(section, L"NetworkFilter");
+			LogDebug(L"[Config] Section: [%ls] (active=%ls)", section.c_str(),
+				(inAppSection || inNetFilterSection) ? L"yes" : L"no");
 			continue;
 		}
 
-		if (!inAppSection) continue;
+		if (!inAppSection && !inNetFilterSection) continue;
 
 		// Key=Value
 		size_t eq = trimmed.find(L'=');
@@ -2616,6 +2666,19 @@ static bool LoadConfigFromIni() {
 		else if (IEquals(key, L"conpty")) {
 			UseConPty = IsBoolTrue(val);
 		}
+		// [NetworkFilter] section keys
+		else if (inNetFilterSection && IEquals(key, L"defaultPolicy")) {
+			g_NetFilterDefault = val;
+			LogInfo(L"[Config] NetworkFilter defaultPolicy = %ls", val.c_str());
+		}
+		else if (inNetFilterSection && IEquals(key, L"connectRules")) {
+			g_NetFilterConnect = val;
+			LogInfo(L"[Config] NetworkFilter connectRules = %ls", val.c_str());
+		}
+		else if (inNetFilterSection && IEquals(key, L"dnsRules")) {
+			g_NetFilterDns = val;
+			LogInfo(L"[Config] NetworkFilter dnsRules = %ls", val.c_str());
+		}
 		else {
 			LogWarn(L"[Config] Unknown key: %ls", key.c_str());
 		}
@@ -2635,6 +2698,16 @@ static bool LoadConfigFromIni() {
 		(unsigned long long)CapabilityList.size(),
 		(unsigned long long)AllowedPaths.size(),
 		(unsigned long long)EnvOverrides.size());
+
+	// Check if network filter is configured
+	g_NetFilterEnabled = !g_NetFilterDefault.empty() || !g_NetFilterConnect.empty() || !g_NetFilterDns.empty();
+	if (g_NetFilterEnabled) {
+		LogInfo(L"[Config] NetworkFilter enabled: default=%ls, connectRules=%ls, dnsRules=%ls",
+			g_NetFilterDefault.empty() ? L"(none)" : g_NetFilterDefault.c_str(),
+			g_NetFilterConnect.empty() ? L"(none)" : g_NetFilterConnect.c_str(),
+			g_NetFilterDns.empty() ? L"(none)" : g_NetFilterDns.c_str());
+	}
+
 	return true;
 }
 
@@ -2714,6 +2787,39 @@ static void BuildChildEnvironmentBlock() {
 		}
 		if (!foundPath) {
 			envPairs.push_back({ L"PATH", prependStr });
+		}
+	}
+
+	// Inject network filter environment variables for NetFilter.dll
+	if (g_NetFilterEnabled) {
+		auto addEnv = [&](const std::wstring& name, const std::wstring& value) {
+			if (value.empty()) return;
+			// Remove existing entry if any
+			for (auto it = envPairs.begin(); it != envPairs.end(); ++it) {
+				if (IEquals(it->first, name)) { envPairs.erase(it); break; }
+			}
+			envPairs.push_back({ name, value });
+			LogDebug(L"[Env] NetFilter var: %ls = %ls", name.c_str(), value.c_str());
+		};
+
+		addEnv(L"_NETFILTER_DEFAULT", g_NetFilterDefault);
+
+		// Convert connect rules from wide to narrow-compatible (ASCII)
+		addEnv(L"_NETFILTER_CONNECT", g_NetFilterConnect);
+		addEnv(L"_NETFILTER_DNS", g_NetFilterDns);
+
+		// Set NetFilter log path if logging is enabled
+		if (g_LogEnabled && !g_LogFilePath.empty()) {
+			// Derive NetFilter log path from launcher log path
+			std::wstring nfLogPath = g_LogFilePath;
+			size_t dotPos = nfLogPath.rfind(L'.');
+			if (dotPos != std::wstring::npos) {
+				nfLogPath = nfLogPath.substr(0, dotPos) + L"_netfilter.log";
+			}
+			else {
+				nfLogPath += L"_netfilter.log";
+			}
+			addEnv(L"_NETFILTER_LOG", nfLogPath);
 		}
 	}
 
@@ -2916,16 +3022,89 @@ static int LaunchInAppContainer(PSID appContainerSid) {
 	PROCESS_INFORMATION pi{};
 	LogInfo(L"[Launch] CreateProcessW: flags=0x%08lX, cmd='%ls'", createFlags, cmdBuf.data());
 
-	BOOL ok = CreateProcessW(
-		nullptr,
-		cmdBuf.data(),
-		nullptr, nullptr,
-		FALSE,
-		createFlags,
-		g_ChildEnv.empty() ? nullptr : g_ChildEnv.data(),
-		workDir.empty() ? nullptr : workDir.c_str(),
-		&si.StartupInfo,
-		&pi);
+	BOOL ok = FALSE;
+	bool needResume = false;
+
+	if (g_NetFilterEnabled) {
+		// Resolve NetFilter.dll path (next to the launcher exe)
+		std::wstring dllPathW = GetExeDir() + L"NetFilter.dll";
+
+		// Grant the AppContainer read-execute access to the DLL
+		if (AddReadOnlyPathUnique(dllPathW)) {
+			LogInfo(L"[Launch] Auto-added NetFilter.dll to read-only paths: %ls", dllPathW.c_str());
+		}
+		GrantReadExecuteToSidOnPath(dllPathW.c_str(), appContainerSid);
+
+		LogInfo(L"[Launch] Injecting NetFilter.dll via remote thread: %ls", dllPathW.c_str());
+
+		// Create process suspended so we can inject before any app code runs
+		ok = CreateProcessW(
+			nullptr,
+			cmdBuf.data(),
+			nullptr, nullptr,
+			FALSE,
+			createFlags | CREATE_SUSPENDED,
+			g_ChildEnv.empty() ? nullptr : g_ChildEnv.data(),
+			workDir.empty() ? nullptr : workDir.c_str(),
+			&si.StartupInfo,
+			&pi);
+
+		if (ok) {
+			needResume = true;
+
+			// Allocate memory in child for the DLL path (wide string)
+			size_t pathBytes = (dllPathW.size() + 1) * sizeof(wchar_t);
+			LPVOID remoteBuf = VirtualAllocEx(pi.hProcess, nullptr, pathBytes,
+				MEM_COMMIT | MEM_RESERVE, PAGE_READWRITE);
+
+			if (!remoteBuf) {
+				LogError(L"[Inject] VirtualAllocEx failed: err=%lu", GetLastError());
+			}
+			else if (!WriteProcessMemory(pi.hProcess, remoteBuf,
+				dllPathW.c_str(), pathBytes, nullptr)) {
+				LogError(L"[Inject] WriteProcessMemory failed: err=%lu", GetLastError());
+				VirtualFreeEx(pi.hProcess, remoteBuf, 0, MEM_RELEASE);
+			}
+			else {
+				// LoadLibraryW address is the same across processes (same boot session)
+				auto pLoadLibW = reinterpret_cast<LPTHREAD_START_ROUTINE>(
+					GetProcAddress(GetModuleHandleW(L"kernel32.dll"), "LoadLibraryW"));
+
+				HANDLE hRemote = CreateRemoteThread(pi.hProcess, nullptr, 0,
+					pLoadLibW, remoteBuf, 0, nullptr);
+
+				if (!hRemote) {
+					LogError(L"[Inject] CreateRemoteThread failed: err=%lu", GetLastError());
+				}
+				else {
+					WaitForSingleObject(hRemote, 10000);
+					DWORD remoteExit = 0;
+					GetExitCodeThread(hRemote, &remoteExit);
+					CloseHandle(hRemote);
+
+					if (remoteExit == 0) {
+						LogWarn(L"[Inject] LoadLibraryW returned NULL in child (DLL load failed)");
+					}
+					else {
+						LogInfo(L"[Inject] NetFilter.dll injected successfully (HMODULE=0x%lX)", remoteExit);
+					}
+				}
+				VirtualFreeEx(pi.hProcess, remoteBuf, 0, MEM_RELEASE);
+			}
+		}
+	}
+	else {
+		ok = CreateProcessW(
+			nullptr,
+			cmdBuf.data(),
+			nullptr, nullptr,
+			FALSE,
+			createFlags,
+			g_ChildEnv.empty() ? nullptr : g_ChildEnv.data(),
+			workDir.empty() ? nullptr : workDir.c_str(),
+			&si.StartupInfo,
+			&pi);
+	}
 
 	DeleteProcThreadAttributeList(attrList);
 
@@ -2954,6 +3133,10 @@ static int LaunchInAppContainer(PSID appContainerSid) {
 	g_ChildProcess = pi.hProcess;
 	LogInfo(L"[Launch] Process created: PID=%lu, TID=%lu", pi.dwProcessId, pi.dwThreadId);
 
+	if (needResume) {
+		ResumeThread(pi.hThread);
+		LogInfo(L"[Launch] Resumed main thread after DLL injection.");
+	}
 	CloseHandle(pi.hThread);
 
 	int exitCode = 0;

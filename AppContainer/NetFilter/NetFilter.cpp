@@ -1,11 +1,14 @@
 // NetFilter.cpp - Network filter DLL for AppContainer
 //
-// Hooks Winsock functions (connect, WSAConnect, sendto, getaddrinfo,
-// GetAddrInfoW) using Microsoft Detours to enforce IP:port and domain-based
-// network filtering rules.  Injected into the child process by the launcher
-// via DetourCreateProcessWithDllExW.
+// Hooks network functions using Microsoft Detours to enforce IP:port and domain-based
+// network filtering rules. Injected into the child process by the launcher.
 //
-// Configuration is passed through environment variables set by the launcher:
+// Supported APIs:
+//   - Winsock: connect, WSAConnect, sendto, getaddrinfo, GetAddrInfoW
+//   - WinHTTP: WinHttpConnect, WinHttpSendRequest
+//   - DNS API: DnsQuery_A, DnsQuery_W, DnsQueryEx
+//
+// Configuration via environment variables:
 //   _NETFILTER_DEFAULT  = "allow" or "block"
 //   _NETFILTER_CONNECT  = "allow:tcp:*:443;block:udp:10.0.0.0/8:*;..."
 //   _NETFILTER_DNS      = "allow:api.example.com;block:*.evil.org;..."
@@ -18,6 +21,9 @@
 #include <winsock2.h>
 #include <ws2tcpip.h>
 #include <windows.h>
+#include <winhttp.h>
+#include <wininet.h>
+#include <windns.h>
 #include <detours.h>
 
 #include <cstdio>
@@ -28,6 +34,8 @@
 #include <string>
 
 #pragma comment(lib, "ws2_32.lib")
+#pragma comment(lib, "winhttp.lib")
+#pragma comment(lib, "dnsapi.lib")
 
 // ========================================================================
 // Data Types
@@ -40,17 +48,17 @@ struct ConnectRule {
 	FilterAction action;
 	FilterProto  proto;
 	bool         anyHost;
-	ULONG        ipAddr;     // host byte order
-	ULONG        ipMask;     // host byte order (e.g. 0xFF000000 for /8)
+	ULONG        ipAddr;
+	ULONG        ipMask;
 	bool         anyPort;
-	USHORT       portLow;    // host byte order, inclusive
-	USHORT       portHigh;   // host byte order, inclusive
+	USHORT       portLow;
+	USHORT       portHigh;
 };
 
 struct DnsRule {
 	FilterAction action;
-	std::string  domain;     // lowercase
-	bool         isWildcard; // domain starts with "*."
+	std::string  domain;
+	bool         isWildcard;
 };
 
 // ========================================================================
@@ -62,13 +70,12 @@ static std::vector<ConnectRule> g_ConnectRules;
 static std::vector<DnsRule>     g_DnsRules;
 static bool                   g_FilterActive = false;
 
-// Logging
 static HANDLE            g_LogFile = INVALID_HANDLE_VALUE;
 static CRITICAL_SECTION  g_LogCS;
 static bool              g_LogCSInited = false;
 
 // ========================================================================
-// Real function pointers (initialised to the actual ws2_32 functions)
+// Real function pointers - Winsock
 // ========================================================================
 
 static int (WSAAPI *Real_connect)(
@@ -90,6 +97,38 @@ static INT (WSAAPI *Real_getaddrinfo)(
 static INT (WSAAPI *Real_GetAddrInfoW)(
 	PCWSTR pNodeName, PCWSTR pServiceName,
 	const ADDRINFOW *pHints, PADDRINFOW *ppResult) = GetAddrInfoW;
+
+// ========================================================================
+// Real function pointers - WinHTTP
+// ========================================================================
+
+typedef HINTERNET (WINAPI *FnWinHttpConnect)(
+	HINTERNET hSession, LPCWSTR pswzServerName, INTERNET_PORT nServerPort, DWORD dwReserved);
+static FnWinHttpConnect Real_WinHttpConnect = WinHttpConnect;
+
+typedef BOOL (WINAPI *FnWinHttpSendRequest)(
+	HINTERNET hRequest, LPCWSTR pwszHeaders, DWORD dwHeadersLength,
+	LPVOID lpOptional, DWORD dwOptionalLength, DWORD dwTotalLength, DWORD_PTR dwContext);
+static FnWinHttpSendRequest Real_WinHttpSendRequest = WinHttpSendRequest;
+
+typedef HINTERNET (WINAPI *FnWinHttpOpenRequest)(
+	HINTERNET hConnect, LPCWSTR pwszVerb, LPCWSTR pwszObjectName, LPCWSTR pwszVersion,
+	LPCWSTR pwszReferrer, LPCWSTR *ppwszAcceptTypes, DWORD dwFlags);
+static FnWinHttpOpenRequest Real_WinHttpOpenRequest = WinHttpOpenRequest;
+
+// ========================================================================
+// Real function pointers - DNS API
+// ========================================================================
+
+typedef DNS_STATUS (WINAPI *FnDnsQuery_A)(
+	PCSTR pszName, WORD wType, DWORD Options, PVOID pExtra,
+	PDNS_RECORD *ppQueryResults, PVOID *pReserved);
+static FnDnsQuery_A Real_DnsQuery_A = DnsQuery_A;
+
+typedef DNS_STATUS (WINAPI *FnDnsQuery_W)(
+	PCWSTR pszName, WORD wType, DWORD Options, PVOID pExtra,
+	PDNS_RECORD *ppQueryResults, PVOID *pReserved);
+static FnDnsQuery_W Real_DnsQuery_W = DnsQuery_W;
 
 // ========================================================================
 // Logging
@@ -171,7 +210,17 @@ static std::string WideToNarrow(const wchar_t *ws) {
 	if (len <= 0) return {};
 	std::string out(len, '\0');
 	WideCharToMultiByte(CP_UTF8, 0, ws, -1, &out[0], len, nullptr, nullptr);
-	out.resize(len - 1); // strip null terminator
+	out.resize(len - 1);
+	return out;
+}
+
+static std::wstring NarrowToWide(const char *s) {
+	if (!s || !s[0]) return {};
+	int len = MultiByteToWideChar(CP_UTF8, 0, s, -1, nullptr, 0);
+	if (len <= 0) return {};
+	std::wstring out(len, L'\0');
+	MultiByteToWideChar(CP_UTF8, 0, s, -1, &out[0], len);
+	out.resize(len - 1);
 	return out;
 }
 
@@ -224,7 +273,6 @@ static bool ParsePort(const char *s, USHORT *outLow, USHORT *outHigh) {
 // Rule Parsing
 // ========================================================================
 
-// Format: "allow:tcp:*:443" or "block:udp:10.0.0.0/8:*" etc.
 static bool ParseConnectRule(const std::string &token, ConnectRule &rule) {
 	auto parts = SplitA(token, ':');
 	if (parts.size() != 4) return false;
@@ -266,7 +314,6 @@ static bool ParseConnectRule(const std::string &token, ConnectRule &rule) {
 	return true;
 }
 
-// Format: "allow:api.example.com" or "block:*.evil.org"
 static bool ParseDnsRule(const std::string &token, DnsRule &rule) {
 	auto parts = SplitA(token, ':');
 	if (parts.size() != 2) return false;
@@ -280,7 +327,7 @@ static bool ParseDnsRule(const std::string &token, DnsRule &rule) {
 
 	if (domain.size() >= 2 && domain[0] == '*' && domain[1] == '.') {
 		rule.isWildcard = true;
-		rule.domain = domain.substr(2); // store "example.com" part
+		rule.domain = domain.substr(2);
 	}
 	else if (domain == "*") {
 		rule.isWildcard = false;
@@ -295,7 +342,6 @@ static bool ParseDnsRule(const std::string &token, DnsRule &rule) {
 }
 
 static void ParseAllRules() {
-	// Default policy
 	std::string defPol = ToLowerA(TrimA(GetEnvA("_NETFILTER_DEFAULT")));
 	if (defPol == "block") {
 		g_DefaultPolicy = FilterAction::BLOCK;
@@ -304,7 +350,6 @@ static void ParseAllRules() {
 		g_DefaultPolicy = FilterAction::ALLOW;
 	}
 
-	// Connect rules
 	std::string connectStr = GetEnvA("_NETFILTER_CONNECT");
 	if (!connectStr.empty()) {
 		auto tokens = SplitA(connectStr, ';');
@@ -321,7 +366,6 @@ static void ParseAllRules() {
 		}
 	}
 
-	// DNS rules
 	std::string dnsStr = GetEnvA("_NETFILTER_DNS");
 	if (!dnsStr.empty()) {
 		auto tokens = SplitA(dnsStr, ';');
@@ -352,19 +396,13 @@ static void ParseAllRules() {
 
 static FilterAction MatchConnect(FilterProto proto, ULONG ipv4Host, USHORT portHost) {
 	for (const auto &r : g_ConnectRules) {
-		// Protocol match
 		if (r.proto != FilterProto::ANY && r.proto != proto) continue;
-
-		// Host match
 		if (!r.anyHost) {
 			if ((ipv4Host & r.ipMask) != (r.ipAddr & r.ipMask)) continue;
 		}
-
-		// Port match
 		if (!r.anyPort) {
 			if (portHost < r.portLow || portHost > r.portHigh) continue;
 		}
-
 		return r.action;
 	}
 	return g_DefaultPolicy;
@@ -374,15 +412,12 @@ static bool DomainMatchesPattern(const char *hostname, const DnsRule &rule) {
 	if (rule.domain == "*") return true;
 
 	if (rule.isWildcard) {
-		// rule.domain = "example.com", matches "foo.example.com" and "example.com"
 		size_t hostLen = strlen(hostname);
 		size_t domLen  = rule.domain.size();
 
-		// Exact match: hostname == "example.com"
 		if (hostLen == domLen && _stricmp(hostname, rule.domain.c_str()) == 0)
 			return true;
 
-		// Suffix match: hostname ends with ".example.com"
 		if (hostLen > domLen + 1) {
 			const char *suffix = hostname + hostLen - domLen;
 			if (suffix[-1] == '.' && _stricmp(suffix, rule.domain.c_str()) == 0)
@@ -391,7 +426,6 @@ static bool DomainMatchesPattern(const char *hostname, const DnsRule &rule) {
 		return false;
 	}
 
-	// Exact match
 	return _stricmp(hostname, rule.domain.c_str()) == 0;
 }
 
@@ -403,6 +437,12 @@ static FilterAction MatchDns(const char *hostname) {
 			return r.action;
 	}
 	return g_DefaultPolicy;
+}
+
+static FilterAction MatchDnsWide(const wchar_t *hostname) {
+	if (!hostname || !hostname[0]) return g_DefaultPolicy;
+	std::string narrow = WideToNarrow(hostname);
+	return MatchDns(narrow.c_str());
 }
 
 // ========================================================================
@@ -426,7 +466,7 @@ static void FormatIPv4(ULONG hostOrder, char *buf, size_t bufLen) {
 }
 
 // ========================================================================
-// Hook Implementations
+// Hook Implementations - Winsock
 // ========================================================================
 
 static int WSAAPI Hook_connect(SOCKET s, const struct sockaddr *name, int namelen) {
@@ -460,7 +500,6 @@ static int WSAAPI Hook_connect(SOCKET s, const struct sockaddr *name, int namele
 				proto == FilterProto::UDP ? "udp" : "any");
 		}
 	}
-	// IPv6 or unknown: apply default policy
 	else if (name->sa_family == AF_INET6) {
 		if (g_DefaultPolicy == FilterAction::BLOCK) {
 			NfLog("BLOCK connect [IPv6] (default policy)");
@@ -506,7 +545,6 @@ static int WSAAPI Hook_WSAConnect(SOCKET s, const struct sockaddr *name, int nam
 static int WSAAPI Hook_sendto(SOCKET s, const char *buf, int len, int flags,
 	const struct sockaddr *to, int tolen)
 {
-	// If to is NULL, this is a send on a connected socket — already filtered by connect
 	if (!g_FilterActive || !to)
 		return Real_sendto(s, buf, len, flags, to, tolen);
 
@@ -541,11 +579,11 @@ static INT WSAAPI Hook_getaddrinfo(PCSTR pNodeName, PCSTR pServiceName,
 
 	FilterAction action = MatchDns(pNodeName);
 	if (action == FilterAction::BLOCK) {
-		NfLog("BLOCK DNS %s", pNodeName);
+		NfLog("BLOCK DNS getaddrinfo %s", pNodeName);
 		return WSAHOST_NOT_FOUND;
 	}
 
-	NfLog("ALLOW DNS %s", pNodeName);
+	NfLog("ALLOW DNS getaddrinfo %s", pNodeName);
 	return Real_getaddrinfo(pNodeName, pServiceName, pHints, ppResult);
 }
 
@@ -558,12 +596,101 @@ static INT WSAAPI Hook_GetAddrInfoW(PCWSTR pNodeName, PCWSTR pServiceName,
 	std::string narrow = WideToNarrow(pNodeName);
 	FilterAction action = MatchDns(narrow.c_str());
 	if (action == FilterAction::BLOCK) {
-		NfLog("BLOCK DNS(W) %s", narrow.c_str());
+		NfLog("BLOCK DNS GetAddrInfoW %s", narrow.c_str());
 		return WSAHOST_NOT_FOUND;
 	}
 
-	NfLog("ALLOW DNS(W) %s", narrow.c_str());
+	NfLog("ALLOW DNS GetAddrInfoW %s", narrow.c_str());
 	return Real_GetAddrInfoW(pNodeName, pServiceName, pHints, ppResult);
+}
+
+// ========================================================================
+// Hook Implementations - WinHTTP
+// ========================================================================
+
+static HINTERNET WINAPI Hook_WinHttpConnect(
+	HINTERNET hSession, LPCWSTR pswzServerName, INTERNET_PORT nServerPort, DWORD dwReserved)
+{
+	if (!g_FilterActive || !pswzServerName || !pswzServerName[0])
+		return Real_WinHttpConnect(hSession, pswzServerName, nServerPort, dwReserved);
+
+	std::string narrow = WideToNarrow(pswzServerName);
+	FilterAction action = MatchDns(narrow.c_str());
+	if (action == FilterAction::BLOCK) {
+		NfLog("BLOCK WinHttpConnect %s:%u", narrow.c_str(), nServerPort);
+		SetLastError(ERROR_INTERNET_NAME_NOT_RESOLVED);
+		return nullptr;
+	}
+
+	NfLog("ALLOW WinHttpConnect %s:%u", narrow.c_str(), nServerPort);
+	return Real_WinHttpConnect(hSession, pswzServerName, nServerPort, dwReserved);
+}
+
+static HINTERNET WINAPI Hook_WinHttpOpenRequest(
+	HINTERNET hConnect, LPCWSTR pwszVerb, LPCWSTR pwszObjectName, LPCWSTR pwszVersion,
+	LPCWSTR pwszReferrer, LPCWSTR *ppwszAcceptTypes, DWORD dwFlags)
+{
+	if (!g_FilterActive || !pwszObjectName)
+		return Real_WinHttpOpenRequest(hConnect, pwszVerb, pwszObjectName, pwszVersion,
+			pwszReferrer, ppwszAcceptTypes, dwFlags);
+
+	std::string objNarrow = WideToNarrow(pwszObjectName);
+	NfLog("WinHttpOpenRequest: %s", objNarrow.c_str());
+
+	return Real_WinHttpOpenRequest(hConnect, pwszVerb, pwszObjectName, pwszVersion,
+		pwszReferrer, ppwszAcceptTypes, dwFlags);
+}
+
+static BOOL WINAPI Hook_WinHttpSendRequest(
+	HINTERNET hRequest, LPCWSTR pwszHeaders, DWORD dwHeadersLength,
+	LPVOID lpOptional, DWORD dwOptionalLength, DWORD dwTotalLength, DWORD_PTR dwContext)
+{
+	if (g_FilterActive && pwszHeaders) {
+		std::string headersNarrow = WideToNarrow(pwszHeaders);
+		NfLog("WinHttpSendRequest headers: %s", headersNarrow.c_str());
+	}
+
+	return Real_WinHttpSendRequest(hRequest, pwszHeaders, dwHeadersLength,
+		lpOptional, dwOptionalLength, dwTotalLength, dwContext);
+}
+
+// ========================================================================
+// Hook Implementations - DNS API
+// ========================================================================
+
+static DNS_STATUS WINAPI Hook_DnsQuery_A(
+	PCSTR pszName, WORD wType, DWORD Options, PVOID pExtra,
+	PDNS_RECORD *ppQueryResults, PVOID *pReserved)
+{
+	if (!g_FilterActive || !pszName || !pszName[0])
+		return Real_DnsQuery_A(pszName, wType, Options, pExtra, ppQueryResults, pReserved);
+
+	FilterAction action = MatchDns(pszName);
+	if (action == FilterAction::BLOCK) {
+		NfLog("BLOCK DnsQuery_A %s (type=%u)", pszName, wType);
+		return DNS_ERROR_RCODE_NAME_ERROR;
+	}
+
+	NfLog("ALLOW DnsQuery_A %s (type=%u)", pszName, wType);
+	return Real_DnsQuery_A(pszName, wType, Options, pExtra, ppQueryResults, pReserved);
+}
+
+static DNS_STATUS WINAPI Hook_DnsQuery_W(
+	PCWSTR pszName, WORD wType, DWORD Options, PVOID pExtra,
+	PDNS_RECORD *ppQueryResults, PVOID *pReserved)
+{
+	if (!g_FilterActive || !pszName || !pszName[0])
+		return Real_DnsQuery_W(pszName, wType, Options, pExtra, ppQueryResults, pReserved);
+
+	std::string narrow = WideToNarrow(pszName);
+	FilterAction action = MatchDns(narrow.c_str());
+	if (action == FilterAction::BLOCK) {
+		NfLog("BLOCK DnsQuery_W %s (type=%u)", narrow.c_str(), wType);
+		return DNS_ERROR_RCODE_NAME_ERROR;
+	}
+
+	NfLog("ALLOW DnsQuery_W %s (type=%u)", narrow.c_str(), wType);
+	return Real_DnsQuery_W(pszName, wType, Options, pExtra, ppQueryResults, pReserved);
 }
 
 // ========================================================================
@@ -584,7 +711,6 @@ static void InitLog() {
 		FILE_ATTRIBUTE_NORMAL, nullptr);
 
 	if (g_LogFile != INVALID_HANDLE_VALUE) {
-		// Write UTF-8 BOM if file is new
 		LARGE_INTEGER sz{};
 		if (GetFileSizeEx(g_LogFile, &sz) && sz.QuadPart == 0) {
 			const BYTE bom[] = { 0xEF, 0xBB, 0xBF };
@@ -625,11 +751,23 @@ BOOL WINAPI DllMain(HINSTANCE hinstDLL, DWORD dwReason, LPVOID lpReserved) {
 			DetourRestoreAfterWith();
 			DetourTransactionBegin();
 			DetourUpdateThread(GetCurrentThread());
+
+			// Winsock hooks
 			DetourAttach(&(PVOID &)Real_connect,      Hook_connect);
-			DetourAttach(&(PVOID &)Real_WSAConnect,    Hook_WSAConnect);
-			DetourAttach(&(PVOID &)Real_sendto,        Hook_sendto);
-			DetourAttach(&(PVOID &)Real_getaddrinfo,   Hook_getaddrinfo);
-			DetourAttach(&(PVOID &)Real_GetAddrInfoW,  Hook_GetAddrInfoW);
+			DetourAttach(&(PVOID &)Real_WSAConnect,   Hook_WSAConnect);
+			DetourAttach(&(PVOID &)Real_sendto,       Hook_sendto);
+			DetourAttach(&(PVOID &)Real_getaddrinfo,  Hook_getaddrinfo);
+			DetourAttach(&(PVOID &)Real_GetAddrInfoW, Hook_GetAddrInfoW);
+
+			// WinHTTP hooks
+			DetourAttach(&(PVOID &)Real_WinHttpConnect,     Hook_WinHttpConnect);
+			DetourAttach(&(PVOID &)Real_WinHttpOpenRequest, Hook_WinHttpOpenRequest);
+			DetourAttach(&(PVOID &)Real_WinHttpSendRequest, Hook_WinHttpSendRequest);
+
+			// DNS API hooks
+			DetourAttach(&(PVOID &)Real_DnsQuery_A, Hook_DnsQuery_A);
+			DetourAttach(&(PVOID &)Real_DnsQuery_W, Hook_DnsQuery_W);
+
 			LONG err = DetourTransactionCommit();
 			NfLog("Hooks installed: %s (err=%ld)",
 				err == NO_ERROR ? "OK" : "FAILED", err);
@@ -642,11 +780,20 @@ BOOL WINAPI DllMain(HINSTANCE hinstDLL, DWORD dwReason, LPVOID lpReserved) {
 		if (g_FilterActive) {
 			DetourTransactionBegin();
 			DetourUpdateThread(GetCurrentThread());
+
 			DetourDetach(&(PVOID &)Real_connect,      Hook_connect);
-			DetourDetach(&(PVOID &)Real_WSAConnect,    Hook_WSAConnect);
-			DetourDetach(&(PVOID &)Real_sendto,        Hook_sendto);
-			DetourDetach(&(PVOID &)Real_getaddrinfo,   Hook_getaddrinfo);
-			DetourDetach(&(PVOID &)Real_GetAddrInfoW,  Hook_GetAddrInfoW);
+			DetourDetach(&(PVOID &)Real_WSAConnect,   Hook_WSAConnect);
+			DetourDetach(&(PVOID &)Real_sendto,       Hook_sendto);
+			DetourDetach(&(PVOID &)Real_getaddrinfo,  Hook_getaddrinfo);
+			DetourDetach(&(PVOID &)Real_GetAddrInfoW, Hook_GetAddrInfoW);
+
+			DetourDetach(&(PVOID &)Real_WinHttpConnect,     Hook_WinHttpConnect);
+			DetourDetach(&(PVOID &)Real_WinHttpOpenRequest, Hook_WinHttpOpenRequest);
+			DetourDetach(&(PVOID &)Real_WinHttpSendRequest, Hook_WinHttpSendRequest);
+
+			DetourDetach(&(PVOID &)Real_DnsQuery_A, Hook_DnsQuery_A);
+			DetourDetach(&(PVOID &)Real_DnsQuery_W, Hook_DnsQuery_W);
+
 			DetourTransactionCommit();
 		}
 		NfLog("NetFilter unloading.");
