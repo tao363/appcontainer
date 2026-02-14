@@ -12,14 +12,24 @@ AppContainer/x64/Debug/opencode/data/opencode/log/*
 *.sln.docstates
 
 # 构建输出
+# 第三方目录
+Detours/
+NetFilter/
+
+# 无意义文件
+nul
+
+# 再次确认构建/临时文件（防万一）
 x64/
 Debug/
 Release/
-bin/
-obj/
+.vs/
 *.exe
+*.dll
 *.pdb
 *.lib
-*.dll
-*.ilk
-*.exp
+*.log
+*.tlog
+*.iobj
+*.ipdb
+opencode/
