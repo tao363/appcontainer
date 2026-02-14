@@ -13,8 +13,6 @@ AppContainer/x64/Debug/opencode/data/opencode/log/*
 
 # 构建输出
 # 第三方目录
-Detours/
-NetFilter/
 
 # 无意义文件
 nul
